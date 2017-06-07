@@ -1,0 +1,32 @@
+git init
+	inicializa el directorio acutal como un repo de git. crea una carpeta .git/
+
+git clone
+	en caso de que el proyecto ya exista, lo va a copiar a tu directorio
+
+git status
+	muestra el estado de mi repo, modificados, nuevos, unttracked files, branch actual
+
+git add
+	 agrega archivos nuevos y modificados a la zona de staging del repoditorio.
+
+git commit
+	registra los cambios en la zonde staging al reprositorio y loas hace rastreables, recuperables y revisables
+
+git branch
+	es un estado de tu codigo que puede se modificado, independientemente del estado de otro branch. sirve para listar lso branches que se tienen
+
+git checkout
+	cambiar de branch
+
+git push
+	permite empujar tus cambios de codigo a un repositorio remoto.
+	cuando no existe el branch en el servidor remoto:
+		git push -u origin <branch-name>
+		-u origin <branch-name>
+	cuando ya existe
+		git push
+
+git 
+	permite jalar los cambios de codigo de un repositorio remoto.
+		git pull

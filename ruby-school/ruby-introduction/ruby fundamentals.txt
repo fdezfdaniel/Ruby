@@ -1,0 +1,45 @@
+symbol
+	se crea una sola vez en toda la vida del programa
+
+arrays
+	array1 = ['este', 'es', 'un', 'arreglo']
+	array2 = [1,2,'3','4','cinco']
+	array3 = []
+	array3 << 'este'
+	array3 << 'es'
+	array3 << 'un'
+	array3 << 'areglo'
+
+Hashes (mapa en java)
+	hash = {:luke => 'jedi', leia: 'princesa', han: 'maestro'}
+	hash[:luke]
+
+metodos
+	def <nombreMetodo>(parametros) 
+		*<statement>
+	end
+
+return
+	def sumar
+		return 2 + 2
+	end
+
+	def sumar
+		2 + 2
+	end
+
+nota
+	m = 'hola'
+	m.upcase 
+	'HOLA'
+	m
+	'hola'
+	m.upcase!
+	'HOLA'
+	m
+	'HOLA'
+
+tarea
+un metodo "gritar" recibe de argumento una cadena y la imprime en mayusculas con tres signos de admiracion
+ejemplo:
+hola -> HOLA!!!
