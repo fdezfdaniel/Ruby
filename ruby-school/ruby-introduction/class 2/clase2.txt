@@ -1,0 +1,123 @@
+array
+	coleccion de datos ordenada
+
+	array = ["first element", 2, :true]
+	array[2] es 2
+	array[-3] es "first element"
+	array << :hello 
+	["first element", 2, :true, :hello]
+	array[4] = "long array"
+	array es ["first element", 2, :true, :hello, "long array"]
+
+
+	list = ['laura','ever','jose','adriana']
+	list.each do |name|
+		puts "el nombre es #{name}"
+	end
+
+	el nombre es laura
+	el nombre es ever
+	el nombre es jose 
+	el nombre es adriana
+
+hashes
+	coleccion de datos - llave y valor - no importa el orden 
+
+	hash = {'key' => 'first element', 2 => :second, doge: ['such', :wow]}
+	hash["key"] es "first element"
+	hash[2] es :second 
+	hash[:doge] es ["such", wow]
+	hash[:doge][0] es "such"
+
+	iterar 
+	hash.each do |key, value|
+		puts "la llave #{key} tiene el valor #{value}"
+	end
+
+symols 
+	cadena inmutable. ocupa el mismo espacio en memoria
+	:simbolo
+
+	beneficios:
+	performance
+	comparaciones
+
+	cuando no usarlos:
+	cuando queremos modificar el simbolo
+
+variables en ruby
+	variable local
+		meh = 'soy una variable local, me muero cuando termina mi bloque'
+		@alive = 'soy de instancia, existo en cada copia de la clase, pero no tengo el mismo valor de las demas'
+		@@like_a_sir = 'soy de clase, existo durante todas las instancias de la clase'
+		$master = 'soy global, accesible desde cualquier parte del programa'
+
+metodos accesores
+	class Persona
+		def initialize(name)
+			@nombre = name
+		end
+
+		def nombre
+			@nombre
+		end
+
+		def nombre=(nuevo_nombre)
+			@nombre = nuevo_nombre
+		end
+	end
+
+ana = Persona.new("Ana Lucia")
+andrei = Persona.new("El Helo")
+
+puts ana.nombre
+puts andrei.nombre
+andrei.nombre = 'perro'
+andrei.nombre 
+
+	attr_accessor tiene ambos, getters y setters
+	attr_reader tiene puros getters
+	attr_writer tiene puros setters
+
+	class Persona
+		attr_accessor :nombre
+		def initialize(name)
+			@nombre = name
+		end
+	end
+
+blocks
+	No son objetos
+	Pequeños pedacitos de código que pueden ser pasados como argumentos a métodos
+	los delimitan las palabras do /end o las llaves {}
+
+	def imprime_pls
+		if block_given?
+			yield
+		else
+			puts "no es un block"
+		end
+	end
+
+	imprime_pls {puts "the cake is a lie"}
+
+procs
+	si son objetos
+	su nombre viene 
+
+	def imprime_pls(&this_is_proc)
+		this_is_proc.call
+	end
+
+	imprime_pls {puts "esto es un proc"}
+
+lambdas
+	tambien son objetos
+	se parecen muchisimo a las funciones. son como procs con esteroides, de hecho, son un objeto de tipo proc.
+	se usan muy poco
+	son como funciones anonimas
+	te permiten usar return
+
+if's
+	usando la palabra if
+	
