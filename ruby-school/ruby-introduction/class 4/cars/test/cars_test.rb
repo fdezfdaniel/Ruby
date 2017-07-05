@@ -36,5 +36,6 @@ class CarsTest < Minitest::Test
   	assert car.wheel_info == "Michelline"
   	assert car.wheel_price == 200.00
   	#asser car.engine_info_and_price == "2.4L-500.00"
+  	#metodos fantasma
   end
 end

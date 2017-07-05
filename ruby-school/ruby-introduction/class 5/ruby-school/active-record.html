@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ActiveRecord</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <textarea id="source">
+      layout: true
+      background-image: url(images/bg1.png)
+      background-position: left bottom
+
+      ---
+      class: center, middle
+
+      # ActiveRecord
+
+      Andrei Helo
+
+      Daniel Varela
+
+      ---
+      .left-column[
+      # Agenda
+      ]
+      .right-column[
+      ### 1. ¿Qué es ActiveRecord?
+      ### 2. _"Convention over Configuration"_
+      ### 3. Nombres y convenciones
+      ### 4. Validaciones, Migraciones y Asociaciones
+      ### 5. Ejercicios
+      ]
+
+      ---
+      .left-column[
+      ### ¿Qué es ActiveRecord?
+      ]
+      .right-column[
+      ### ¿Qué es ActiveRecord?
+      **ActiveRecord** facilita la creación de objetos cuya información debe ser .red[persistida] en algúna base de datos.
+
+      <br/>
+      - Se conecta a diferentes bases de datos a través de adaptadores de conexión (drivers en Java o DataProviders en .Net)
+
+      - Nos ayuda a interactuar con los datos de la base de datos fácilmente.
+
+      - Además que nos permite validar la información antes de ser enviada a la BD.
+
+      - Migraciones automáticas 🤘
+
+      - Asociaciones bien bonis 😍
+      ]
+
+      ---
+      .left-column[
+      ### ¿Qué es ActiveRecord?
+      ### Patrón de diseño
+      ]
+      .right-column[
+      ### Patrón de diseño
+
+      **.red[ActiveRecord]** como patrón de diseño (donde sea!)
+
+      <br/>
+
+      - Nombrado así en _"Patterns of Enterprise Application Architecture"_ por **Martin Fowler** 🤓
+
+      - Es un objeto que **envuelve** un renglón en una tabla de la base de datos y que también **encapsula** el acceso a la base de datos y agrega lógica a esos datos.
+
+      - Cuenta con funciones para **insertar, actualizar, y eliminar** datos de la base de datos.
+
+      - Se hizo famoso por la implementación en **Rails** pero existe en casí todos los lenguajes conocidos.
+      ]
+
+      ---
+      .left-column[
+      ### ¿Qué es ActiveRecord?
+      ### Patrón de diseño
+      ### ActiveRecord Framework
+      ]
+      .right-column[
+      ### ActiveRecord Framework
+
+      **.red[ActiveRecord]** como "_framework_" (ruby)
+
+      - Es la implementación del patrón en Ruby, utilizado en la mayoría de las aplicaciones que requieren acceso a datos en una Base de Datos.
+
+      <br/>
+
+      ¿Cómo funciona?
+
+      ```ruby
+        require 'active_record'
+
+        class Usuario < ActiveRecord::Base
+          # cosas de validaciones
+          # cosas de asociaciones
+        end
+      ```
+      ]
+
+      ---
+      .left-column[
+      ### ¿Qué es ActiveRecord?
+      ### Patrón de diseño
+      ### ActiveRecord Framework
+      ]
+      .right-column[
+      ### ActiveRecord framework: tipos de datos
+        Tipo en Ruby | En Base de datos
+        -------------|-------------------
+        string:      | `varchar`
+        text:        | `text`
+        integer:     | `int`
+        float:       | `float`
+        decimal:     | `decimal`
+        datetime:    | `datetime`
+        timestamp:   | `timestamp`
+        date:        | `date`
+        binary:      | `blob`
+        boolean:     | `tinyint`
+        json:        | `json`
+      ]
+
+      ---
+      .left-column[
+      ### _"Convention over Configuration"_
+      ]
+      .right-column[
+        ### _"Convention over Configuration"_
+
+        Es un paradigma de software que minimiza el número de decisiones que un desarrollador necesita tomar y gana simplicidad sin perder flexibilidad.
+      ]
+
+      ---
+      .left-column[
+      ### _"Convention over Configuration"_
+      ]
+      .right-column[
+        ### _"Convention over Configuration"_
+
+        Es un paradigma de software que minimiza el número de decisiones que un desarrollador necesita tomar y gana simplicidad sin perder flexibilidad.
+
+        ![khe?](http://m.memegen.com/o03h28.jpg)
+      ]
+
+      ---
+      .left-column[
+      ### _"Convention over Configuration"_
+      ]
+      .right-column[
+        ### _"Convention over Configuration"_
+
+        - Toma las decisiones más comunes por ti.
+
+        - Funciona sin tener que configurar toda tu aplicación (out of the box).
+
+        - En caso de necesitar cambiar algo, es muy flexibile y te permite hacerlo, por ejemplo en las bases de datos legacies.
+      ]
+
+      ---
+      .left-column[
+      ### Nombres y convenciones
+      ]
+      .right-column[
+        ### Nombres y convenciones
+
+        Por default ActiveRecord usa algunas convenciones de nombres para las tablas y columnas, objetos y propiedades.
+
+        .red[Ejemplo:]
+
+        Model/Class         | Table/Schema
+        --------------------|---------------
+        `Articulo`          | `articulos`
+        `LineItem`          | `line_items`
+        `Perro`             | `perros`
+        `Mouse`             | `mice`
+        `Person`            | `people`
+
+      ]
+
+      ---
+      .left-column[
+      ### Nombres y convenciones
+      ]
+      .right-column[
+        ### Nombres y convenciones
+
+        - El nombre de las columnas seran el mismo al de los atributos.
+
+        .red[Ejemplo:]
+
+        ```ruby
+          p = Person.new
+          p.nombre = 'John'
+        ```
+
+        En la base de datos debe existir una tabla llamada ***'people'*** con una columna llamada ***'nombre'***.
+
+        <br/>
+        Es posible hacer el mapeo de una propiedad a otra columna en la base de datos usando:
+
+        ```ruby
+        alias_attribute :<nombre-nuevo>, :<nombre-de-la-columna>
+        ```
+      ]
+
+      ---
+      class: center, middle
+
+      # Validaciones, Migraciones y Asociaciones
+      (Y al parecer todo lo que termine con "aciones"...)
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Validaciones
+
+        Existen ocasiones en las que queremos mantener la ~~validez~~ consistencia de los datos.
+
+        - __Constraints__ en base de datos.
+
+        - Validaciones del lado del cliente.
+
+        Pero que mejor manera que hacerlo desde la clase misma!
+
+        .small-image.center.middle[![Stap](images/stap.jpg)]
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Validaciones
+
+        Toda validación será "disparada" por cualquiera de los siguientes métodos:
+
+        - `create` o `create!`
+
+        - `save` o `save!`
+
+        - `update` o `update!`
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Métodos valid? e invalid?
+
+        ¿Cómo saber si un objeto es válido o no?
+
+        ```ruby
+        >> Persona.create(nombre: 'Andrei Helo').valid?
+        # => true
+        >> Persona.create(nombre: nil).valid?
+        # => false
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Errores
+
+        Todo objeto de ActiveRecord tiene asociado un __arreglo__ de __errores__, el cual incluye
+        información relevante sobre los impedimentos para almacenar dicho objeto.
+
+        ```ruby
+        >> persona = Persona.create
+        # => #<Persona id: nil, nombre: nil, fecha_de_nacimiento: nil, genero: nil, apodo: nil, ahorro: 0.0, created_at: nil, updated_at: nil>
+        >> persona.errors.messages
+        # => {:genero=>["can't be blank"]}
+        >> persona.errors.full_messages
+        # => ["Genero can't be blank"]
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Validation Helpers
+
+        ActiveRecord ofrece un grán número de __helpers__ predefinidos y es posible incluso asignarles un mensaje personalizado.
+
+        ```ruby
+        class Persona < ActiveRecord::Base
+          validates :atributo_1, helper_1: true
+          validates :atributo_2,
+                    helper_2: {
+                      message: 'No se arma compa!'
+                    }
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Validation Helpers
+
+        Algunos de los más comunes:
+
+        - `:format`
+
+        - `:length`
+
+        - `:numericality`
+
+        - `:presence`
+
+        - `:uniqueness`
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Format
+
+        ```ruby
+        class Persona < ActiveRecord::Base
+          validates :nombre,
+            format: {
+              with: /\A[a-zA-Z]+\z/,
+              message: 'Hey! Solo letras chato!'
+            }
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Length
+
+        Acepta opciones como:
+
+        - `:minimum`
+
+        - `:maximum`
+
+        - `:in`
+
+        - `:is`
+
+        ```ruby
+        class Persona < ActiveRecord::Base
+            validates :contrasena, length: { in: 1..8 }
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Numericality
+
+        Acepta opciones como:
+
+        - `:greater_than`
+        - `:greater_than_or_equal_to`
+        - `:equal_to`
+        - `:less_than`
+        - `:less_than_or_equal_to`
+        - `:other_than`
+        - `:odd`
+        - `:even`
+        ```ruby
+        class Persona < ActiveRecord::Base
+            validates :estatura,
+              numericality: { only_integer: true }
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Presence
+
+        ```ruby
+        class Persona < ActiveRecord::Base
+          validates :nombre, presence: true
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Uniqueness
+
+        ```ruby
+        class Persona < ActiveRecord::Base
+          validates :numero_de_empleado, uniqueness: true
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### :if y :unless
+
+        Es posible especificar bajo qué circunstancias ejecutar las validaciones.
+
+        ```ruby
+        class Persona < ActiveRecord::Base
+          validates :nombre,
+            format: { with: /\A[a-zA-Z]+\z/ },
+            unless: :es_un_enano?
+
+          def es_un_enano?
+            estatura < 120
+          end
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ]
+      .right-column[
+        ### Validaciones personalizadas
+
+        #### Y la magia continúa! \o/
+
+        También podemos especificar las validaciones que se nos ocurran.
+
+        ```ruby
+        class Persona < ActiveRecord::Base
+          validate :fecha_de_nacimiento_no_puede_ser_en_el_futuro
+
+          private
+
+          def fecha_de_nacimiento_no_puede_ser_en_el_futuro
+            if fecha_de_nacimiento.present?
+              && fecha_de_nacimiento > Date.today
+                errors.add(:fecha_de_nacimiento,
+                  'a menos de que seas un viajero del tiempo no puede ser en el futuro...'
+                )
+            end
+          end
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ### Migraciones
+      ]
+      .right-column[
+        ### Migraciones
+
+        Son una manera conveniente de modificar nuestra base de datos
+        a través del tiempo de una forma sencilla y consistente en lugar de darnos
+        de __trancazos__ directamente con el manejador de base de datos.
+
+        ```ruby
+        class CrearPersonas < ActiveRecord::Migration[5.1]
+          def change
+            create_table :personas do |t|
+              t.string  :nombre
+              t.date    :fecha_de_nacimiento
+              ...
+
+              # Opcional
+              t.timestamps
+            end
+          end
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ### Migraciones
+      ]
+      .right-column[
+        ### Migraciones
+
+        Además de poder crear tablas, podemos agregar nuevas columnas.
+
+        ```ruby
+        class AgregarPesoEnPersonas < ActiveRecord::Migration[5.1]
+          def change
+            add_column :personas, :peso, :integer
+            add_index  :personas, :peso
+          end
+        end
+        ```
+
+         O eliminarlas...
+
+        ```ruby
+        class EliminarPesoEnPersonas < ActiveRecord::Migration[5.1]
+          def change
+            remove_column :personas, :peso, :integer
+            remove_index  :personas, :peso
+          end
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ### Migraciones
+      ]
+      .right-column[
+        ### Migraciones
+
+        Es posible también realizar actualizaciones de columnas/atributos existentes:
+
+        ```ruby
+        class ActualizarEstaturaEnPersonas < ActiveRecord::Migration[5.1]
+          def up
+            change_table :personas do |t|
+              t.change :estatura, :float
+            end
+          end
+
+          def down
+            change_table :personas do |t|
+              t.change :estatura, :integer
+            end
+          end
+        end
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ### Migraciones
+      ]
+      .right-column[
+        ### Migraciones
+
+        Bueno... y ¿luego? ¿cómo las ejecuto?
+
+        ```ruby
+        >> rake -vT
+        # rake db:create   # Creates the database from...
+        # rake db:drop     # Drops the database from D...
+        # rake db:migrate  # Migrate the database (opt...
+        # rake db:rollback # Rolls the schema back to ...
+        ```
+
+        Para implementarlas fácilmente usaremos la gema Standalone Migrations:
+
+        https://github.com/thuss/standalone-migrations
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ### Migraciones
+      ### Asociaciones
+      ]
+      .right-column[
+        ### Asociaciones
+
+        Prácticamente, una asociación es una __conexión__ entre 2 modelos de ActiveRecord.
+
+        Existen distintos tipos de asociaciones:
+
+        - `belongs_to`
+
+        - `has_one`
+
+        - `has_many`
+
+        - `has_many :through`
+
+        - `has_one :through`
+
+        - `has_and_belongs_to_many`
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ### Migraciones
+      ### Asociaciones
+      ]
+      .right-column[
+        ### belongs_to
+
+        Indica que una instancia del modelo que incluye esta asociación "pertenece"
+        a una instancia del otro modelo especificado.
+
+        ```ruby
+        class Producto < ActiveRecord::Base
+          belongs_to :persona
+        end
+        ```
+
+        ```
+        +--------------+         +--------------+
+        | Productos    |         | Personas     |
+        +--------------+         +--------------+
+        | id           | ------> | id           |
+        | descripcion  |         | nombre       |
+        | persona_id   |         +--------------+
+        +--------------+
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ### Migraciones
+      ### Asociaciones
+      ]
+      .right-column[
+        ### has_one
+
+        También indica una asociación de uno a uno con otro modelo pero bajo el
+        contexto de que una instancia del modelo que incluye esta asociación solamente "tiene una"
+        instancia del otro modelo especificado.
+
+
+        ```ruby
+        class Persona < ActiveRecord::Base
+          has_one :producto
+        end
+        ```
+
+        ```
+        +--------------+         +--------------+
+        | Productos    |         | Personas     |
+        +--------------+         +--------------+
+        | id           | ------> | id           |
+        | descripcion  |         | nombre       |
+        | persona_id   |         +--------------+
+        +--------------+
+        ```
+      ]
+
+      ---
+      .left-column[
+      ### Validaciones
+      ### Migraciones
+      ### Asociaciones
+      ]
+      .right-column[
+        ### has_many
+
+        Esta asociación por el contrario, indica una relación de uno a muchos con otro modelo
+        lo cual significa que una instancia del modelo que incluye esta asociación puede tener
+        "muchas" otras instancias del otro modelo especificado.
+
+
+        ```ruby
+        class Persona < ActiveRecord::Base
+          has_many :productos
+        end
+        ```
+
+        ```
+        +--------------+         +--------------+
+        | Productos    |         | Personas     |
+        +--------------+         +--------------+
+        | id           | ------> | id           |
+        | descripcion  |         | nombre       |
+        | persona_id   |         +--------------+
+        +--------------+
+        ```
+      ]
+
+      ---
+      class: center, middle
+
+      # Ejercicios \o/
+
+      ![Finn](images/finn.jpg)
+
+      dvarelap/ruby-school
+
+      ---
+      class: center, middle
+      # ¿Preguntas?
+
+    </textarea>
+    <script src="js/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
